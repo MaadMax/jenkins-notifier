@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+
+  "name": "Jenkins Notifier",
+  "description": "When Jenkins finish à job, you'll be notified even if the job is successfuly ended or crashed.",
+  "Author": "Maxime LAFARIE",
+  "version": "1.0",
+  "default_locale": "en",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+    },
+    "permissions": [
+    "unlimitedStorage",
+    "tabs",
+    "activeTab",
+    "http://forge.raccourci.dev/*"
+    ]
+  }
