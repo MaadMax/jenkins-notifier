@@ -78,11 +78,14 @@ body {
   position: absolute;
   top: 58%;
   left: 10%;
-  display: none;
 }
 
 .statusmessage {
   left: 20%;
   position: absolute;
   top: 60%;
+}
+
+#message {
+  display: none;
 }

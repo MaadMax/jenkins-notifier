@@ -2,6 +2,7 @@
 
   var jenkinsTab = null;
   var interval = null;
+  var started = false;
 
   function findJenkins (callback) {
     chrome.tabs.query({active: false, currentWindow: true}, function(tabs){
@@ -36,13 +37,14 @@
 
   chrome.runtime.onMessage.addListener(function(request, sender) {
     if (request.action == "getSource") {
-      //message.innerText = request.source;
+      message.innerText = request.source;
       var foundin = $('*:contains("Finished: SUCCESS")');
       if (foundin.length > 0) {
-        clearInterval(interval);
+        stopProcessing();
         $('.loader').hide();
         $('.tick').show();
         $('.statusmessage').innerText = jenkinsTab.url.split('/')[4].replace(/%20/g, " ") + " finished successfuly!";
+        disableBrowserAction();
         notifyMe();
       }
       else {
@@ -62,18 +64,52 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
+  function processing () {
+    interval = setInterval(function () {
+      $('.tick').hide();
 
-    if (Notification.permission !== "granted") {
-      Notification.requestPermission();
-    }
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+      }
 
-    findJenkins(function(jenkins) {
-      jenkinsTab = jenkins;
-      interval = setInterval(function () {
+      findJenkins(function(jenkins) {
+        jenkinsTab = jenkins;
         onWindowLoad(jenkins.id);
-      }, 5000);
-    });
+      });
+    }, 5000);
+  }
 
+  function stopProcessing () {
+    clearInterval(interval);
+  }
+
+  function disableBrowserAction(){
+    chrome.browserAction.setBadgeBackgroundColor({color:[204, 0, 0, 230]});
+    chrome.browserAction.setBadgeText({text:"OFF"});
+    stopProcessing();
+  }
+
+  function enableBrowserAction(){
+    chrome.browserAction.setBadgeBackgroundColor({color:[102, 204, 0, 230]});
+    chrome.browserAction.setBadgeText({text:"ON"});
+    processing();
+  }
+
+  function updateState(){
+    if(started === false){
+      started = true;
+      enableBrowserAction();
+    }
+    else{
+      started = false;
+      disableBrowserAction();
+    }
+  }
+  chrome.browserAction.onClicked.addListener(updateState);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (started === true) {
+      processing();
+    }
   });
 })();
