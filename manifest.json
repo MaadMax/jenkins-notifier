@@ -3,18 +3,27 @@
 
   "name": "Jenkins Notifier",
   "description": "When Jenkins finish à job, you'll be notified even if the job is successfuly ended or crashed.",
-  "Author": "Maxime LAFARIE",
+  "author": "Maxime LAFARIE",
   "version": "1.0",
-  "default_locale": "en",
 
-  "browser_action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
+  "background": {
+    "scripts": ["jquery.js", "popup.js", "getPagesSource.js"],
+    "persistent": false
     },
-    "permissions": [
-    "unlimitedStorage",
-    "tabs",
-    "activeTab",
-    "http://forge.raccourci.dev/*"
-    ]
-  }
+    "content_scripts": [
+    {
+      "matches": ["http://forge.raccourci.dev/*"],
+      "js": ["jquery.js", "popup.js"]
+    }
+    ],
+    "browser_action": {
+      "default_icon": "icon.png",
+      "default_popup": "popup.html"
+      },
+      "permissions": [
+      "unlimitedStorage",
+      "tabs",
+      "activeTab",
+      "http://forge.raccourci.dev/*"
+      ]
+    }

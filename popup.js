@@ -6,7 +6,6 @@
   function findJenkins (callback) {
     chrome.tabs.query({active: false, currentWindow: true}, function(tabs){
       for (var i = 0; i < tabs.length; i++) {
-        console.log(tabs[i]);
         if (tabs[i].url.indexOf('forge.raccourci.dev') > -1) {
           var jenkins = tabs[i];
         }
@@ -15,7 +14,7 @@
     });
   }
 
-  function notifyMe() {
+  function notifyMe () {
     if (!Notification) {
       alert('Desktop notifications not available in your browser. Try Chromium.');
       return;
@@ -37,11 +36,13 @@
 
   chrome.runtime.onMessage.addListener(function(request, sender) {
     if (request.action == "getSource") {
-      message.innerText = request.source;
-      var foundin = $('*:contains("Finished: ssssSUCCESS")');
-      console.log('FOUND', foundin);
+      //message.innerText = request.source;
+      var foundin = $('*:contains("Finished: SUCCESS")');
       if (foundin.length > 0) {
         clearInterval(interval);
+        $('.loader').hide();
+        $('.tick').show();
+        $('.statusmessage').innerText = jenkinsTab.url.split('/')[4].replace(/%20/g, " ") + " finished successfuly!";
         notifyMe();
       }
       else {
@@ -50,7 +51,7 @@
     }
   });
 
-  function onWindowLoad(tabId) {
+  function onWindowLoad (tabId) {
     var message = document.querySelector('#message');
     chrome.tabs.executeScript(tabId, {
       file: "getPagesSource.js"
@@ -69,7 +70,9 @@
 
     findJenkins(function(jenkins) {
       jenkinsTab = jenkins;
-      interval = setInterval(onWindowLoad(jenkins.id), 10000);
+      interval = setInterval(function () {
+        onWindowLoad(jenkins.id);
+      }, 5000);
     });
 
   });
