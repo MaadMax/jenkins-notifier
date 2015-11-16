@@ -14,13 +14,13 @@
       },
       "content_scripts": [
       {
-        "matches": ["http://forge.raccourci.dev/*"],
+        "matches": ["http://forge.raccourci.dev/*", "http://*/*", "https://*/*"],
         "js": ["jquery.js", "popup.js", "getPagesSource.js"]
       }
       ],
       "browser_action": {
         "default_icon": "rsz_icon.png"
-        //"default_popup": "popup.html"
+        // "default_popup": "popup.html"
         },
         "icons": {
         "48": "rsz_icon.png",
@@ -29,6 +29,8 @@
         "unlimitedStorage",
         "tabs",
         "activeTab",
-        "http://forge.raccourci.dev/*"
+        "http://forge.raccourci.dev/*",
+        "http://*/*",
+        "https://*/*"
         ]
       }

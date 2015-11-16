@@ -3,6 +3,10 @@
   var jenkinsTab = null;
   var interval = null;
   var started = false;
+  var jenkins = "http://forge.raccourci.dev/";
+  var jobs = [
+  "DRUPAL%20(Deploy%20D7%20core%20-%20PROD)"
+  ];
 
   function findJenkins (callback) {
     chrome.tabs.query({active: false, currentWindow: true}, function(tabs){
@@ -12,6 +16,23 @@
         }
       }
       callback(jenkins);
+    });
+  }
+
+  function fetch (endpoint) {
+    $.ajax({
+      url: jenkins + 'job/' + endpoint + '/api/json',
+      data: {},
+      type: 'GET',
+      crossDomain: true,
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+        if (data.inQueue) {
+          return data;
+        }
+      },
+      error: function() { console.error('Failed!'); }
     });
   }
 
@@ -108,8 +129,12 @@
   chrome.browserAction.onClicked.addListener(updateState);
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (started === true) {
-      processing();
-    }
+
+    // _.each(jobs, function (job) {
+    //   var jobObj = fetch(job);
+    //   var jobId = job
+    //   fetch (job + '/')
+    // });
+
   });
 })();
