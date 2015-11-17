@@ -3,10 +3,6 @@
   var jenkinsTab = null;
   var interval = null;
   var started = false;
-  var jenkins = "http://forge.raccourci.dev/";
-  var jobs = [
-  "DRUPAL%20(Deploy%20D7%20core%20-%20PROD)"
-  ];
 
   function findJenkins (callback) {
     chrome.tabs.query({active: false, currentWindow: true}, function(tabs){
@@ -19,21 +15,10 @@
     });
   }
 
-  function fetch (endpoint) {
-    $.ajax({
-      url: jenkins + 'job/' + endpoint + '/api/json',
-      data: {},
-      type: 'GET',
-      crossDomain: true,
-      dataType: 'json',
-      success: function(data) {
-        console.log(data);
-        if (data.inQueue) {
-          return data;
-        }
-      },
-      error: function() { console.error('Failed!'); }
-    });
+  function playHornSound () {
+    // Previously remove the evantual old audio tag
+    $('audio').remove();
+    $('body').append('<audio preload="auto" autoplay><source src="horn.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio>')
   }
 
   function notifyMe () {
@@ -64,6 +49,7 @@
         stopProcessing();
         $('.loader').hide();
         $('.tick').show();
+        playHornSound();
         $('.statusmessage').innerText = jenkinsTab.url.split('/')[4].replace(/%20/g, " ") + " finished successfuly!";
         disableBrowserAction();
         notifyMe();
@@ -129,12 +115,6 @@
   chrome.browserAction.onClicked.addListener(updateState);
 
   document.addEventListener('DOMContentLoaded', function() {
-
-    // _.each(jobs, function (job) {
-    //   var jobObj = fetch(job);
-    //   var jobId = job
-    //   fetch (job + '/')
-    // });
 
   });
 })();

@@ -4,7 +4,7 @@
   "name": "Jenkins Notifier",
   "description": "When Jenkins finish à job, you'll be notified even if the job is successfuly ended or crashed.",
   "author": "Maxime LAFARIE",
-  "version": "1.1",
+  "version": "1.2",
 
   "background": {
     "scripts": ["jquery.js", "popup.js", "getPagesSource.js"]
@@ -20,7 +20,7 @@
       ],
       "browser_action": {
         "default_icon": "rsz_icon.png"
-        // "default_popup": "popup.html"
+        // ,"default_popup": "popup.html"
         },
         "icons": {
         "48": "rsz_icon.png",
